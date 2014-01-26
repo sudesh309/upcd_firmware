@@ -8,14 +8,17 @@
 #include "usblib/device/usbdevice.h"
 #include "upcd.h"
 
-#define DATA_IN_EP USB_EP_1
-#define DATA_OUT_EP USB_EP_1
+#define UPCD_VID		0x1337
+#define UPCD_PID		0x0042	
 
-#define DATA_IN_EP_FIFO_SIZE USB_FIFO_SZ_64
-#define DATA_OUT_EP_FIFO_SIZE USB_FIFO_SZ_64
+#define DATA_IN_EP		USB_EP_1
+#define DATA_OUT_EP		USB_EP_1
 
-#define DATA_IN_EP_MAX_SIZE USBFIFOSizeToBytes(DATA_IN_EP_FIFO_SIZE)
-#define DATA_OUT_EP_MAX_SIZE USBFIFOSizeToBytes(DATA_OUT_EP_FIFO_SIZE)
+#define DATA_IN_EP_FIFO_SIZE	USB_FIFO_SZ_64
+#define DATA_OUT_EP_FIFO_SIZE	USB_FIFO_SZ_64
+
+#define DATA_IN_EP_MAX_SIZE	USBFIFOSizeToBytes(DATA_IN_EP_FIFO_SIZE)
+#define DATA_OUT_EP_MAX_SIZE	USBFIFOSizeToBytes(DATA_OUT_EP_FIFO_SIZE)
 
 uint8_t g_UPCDDeviceDescriptor[] = {
 	18,
@@ -101,6 +104,80 @@ const tConfigHeader g_UPCDConfigHeader = {
 const tConfigHeader *const g_UPCDConfigurationDescriptors[] = {
 	&g_UPCDConfigHeader
 };
+
+const uint8_t g_langDescriptor[] =
+{
+    4,
+    USB_DTYPE_STRING,
+    USBShort(USB_LANG_EN_US)
+};
+
+const uint8_t g_manufacturerString[] =
+{
+    (10 + 1) * 2,
+    USB_DTYPE_STRING,
+    'C', 0, '-', 0, 'D', 0, 'A', 0, 'C', 0, ' ', 0, 'A', 0, 'C', 0,
+    'T', 0, 'S', 0,
+};
+
+const uint8_t g_productString[] =
+{
+    (29 + 1) * 2,
+    USB_DTYPE_STRING,
+    'U', 0, 'S', 0, 'B', 0, ' ', 0, 'P', 0, 'e', 0, 'r', 0, 'i', 0,
+    'p', 0, 'h', 0, 'e', 0, 'r', 0, 'a', 0, 'l', 0, ' ', 0, 'C', 0,
+    'o', 0, 'n', 0, 't', 0, 'r', 0, 'o', 0, 'l', 0, ' ', 0, 'D', 0,
+    'e', 0, 'v', 0, 'i', 0, 'c', 0, 'e', 0,
+};
+
+const uint8_t g_serialNumberString[] = 
+{ 
+    (7 + 1) * 2, 
+    USB_DTYPE_STRING, 
+    'U', 0, 'S', 0, 'B', 0, '-', 0, '0', 0, '0', 0, '1', 0, 
+};
+
+const uint8_t g_interfaceString[] = 
+{ 
+    (28 + 1) * 2, 
+    USB_DTYPE_STRING, 
+    'D', 0, 'e', 0, 'f', 0, 'a', 0, 'u', 0, 'l', 0, 't', 0, ' ', 0, 
+    'P', 0, 'e', 0, 'r', 0, 'i', 0, 'p', 0, 'h', 0, 'e', 0, 'r', 0,
+    'a', 0, 'l', 0, ' ', 0, 'I', 0, 'n', 0, 't', 0, 'e', 0, 'r', 0,
+    'f', 0, 'a', 0, 'c', 0, 'e', 0, 
+};
+
+const unsigned char g_configString[] = 
+{ 
+    (32 + 1) * 2, 
+    USB_DTYPE_STRING, 
+    'D', 0, 'e', 0, 'f', 0, 'a', 0, 'u', 0, 'l', 0, 't', 0, ' ', 0,
+    'P', 0, 'e', 0, 'r', 0, 'i', 0, 'p', 0, 'h', 0, 'e', 0, 'r', 0,
+    'a', 0, 'l', 0, ' ', 0, 'C', 0, 'o', 0, 'n', 0, 'f', 0, 'i', 0,
+    'g', 0, 'u', 0, 'r', 0, 'a', 0, 't', 0, 'i', 0, 'o', 0, 'n', 0, 
+};
+
+const unsigned char *const g_stringDescriptors[] = 
+{ 
+    g_langDescriptor, 
+    g_manufacturerString, 
+    g_productString,
+    g_serialNumberString, 
+    g_interfaceString, 
+    g_configString 
+};
+
+#define NUM_STRING_DESCRIPTORS (sizeof(g_stringDescriptors) / sizeof(uint8_t *))
+
+upcd_device UPCDDev = {
+	UPCD_VID,
+	UPCD_PID,
+	500,
+	USB_CONF_ATTR_SELF_PWR,
+	g_stringDescriptors,
+	NUM_STRING_DESCRIPTORS,	
+};
+
 
 static void HandleEndpoints(void *dev, uint32_t status)
 {
