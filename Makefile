@@ -20,7 +20,7 @@ LDSCRIPT	= $(VEN_DIR)/linker_script.ld
 # Processer variant
 CPU		= cortex-m4
 FPU		= fpv4-sp-d16 -mfloat-abi=softfp
-PART 		= TM4C123
+PART 		= TM4C1233H6PM
 
 # Files
 BIN		= $(BUILD_DIR)/$(NAME).bin
@@ -110,7 +110,7 @@ dir:
 	$(MKDIR) $(BUILD_DIR)
 
 flash: bin
-	$(FLASH) $(BIN)
+	$(FLASH) -E $(BIN)
 
 size: bin
 	$(SIZE) $(ELF)

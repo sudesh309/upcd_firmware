@@ -10,7 +10,15 @@ typedef struct {
 } ioPin_t;
 
 typedef struct {
-    ioPin_t ioPin[35];
+    ioPin_t fPin;
+    ioPin_t rPin;
+    ioPin_t pwmPin[2];
+    uint16_t dutyCycle;
+} mtrCtl_t;
+
+typedef struct {
+    ioPin_t ioPin[36];
+    mtrCtl_t mtrCtl[4];  
 } peripheral_desc;
 
 #endif

@@ -4,9 +4,9 @@
 #include "peripheral_desc.h"
 #include "driverlib/gpio.h"
 
-uint32_t MapPin(ioPin_t ioPin)
+uint32_t MapPin(uint8_t pin)
 {
-    switch(ioPin.pin) {
+    switch(pin) {
         case 0:
             return GPIO_PIN_0;
         case 1: 
@@ -28,9 +28,9 @@ uint32_t MapPin(ioPin_t ioPin)
     }
 }
 
-uint32_t MapPort(ioPin_t ioPin)
+uint32_t MapPort(uint8_t port)
 {
-    switch(ioPin.port) {
+    switch(port) {
         case 1:
             return GPIO_PORTA_BASE;
         case 2: 
