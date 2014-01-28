@@ -6,26 +6,24 @@
 #include "map.h"
 
 extern peripheral_desc desc;
-uint32_t mask;
-uint32_t mask1 = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3;
 
 uint32_t CmdHandler(uint8_t *data, uint32_t size)
 {
    switch(data[0]) {
        case 'R':
-           mask = GPIO_PIN_1;
+           desc.ioPin[0].pin = 1;
            break;
         case 'B':
-           mask = GPIO_PIN_2;
+           desc.ioPin[0].pin = 2;
            break;
         case 'G':
-           mask = GPIO_PIN_3;
+           desc.ioPin[0].pin = 3;
            break;
         default:
-           mask = MapPin(data[1] - '0');
+           desc.ioPin[0].pin = MapPin(data[1] - '0');
    }
 
-   data[0] = data[1];
+   SaveConfig();
 
 	return size;
 }

@@ -8,8 +8,8 @@
 #include "usblib/device/usbdevice.h"
 #include "upcd.h"
 
-#define UPCD_VID		0x1337
-#define UPCD_PID		0x0042	
+#define UPCD_VID		 0x1cbe
+#define UPCD_PID		 0x0003	
 
 #define DATA_IN_EP		USB_EP_1
 #define DATA_OUT_EP		USB_EP_1

@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 typedef struct {
-    unsigned int port : 3;
-    unsigned int pin : 3;
-    unsigned int mode : 1;
+    uint8_t port;
+    uint8_t pin;
+    uint8_t mode;
 } ioPin_t;
 
 typedef struct {
