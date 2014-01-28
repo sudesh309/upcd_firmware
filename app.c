@@ -70,9 +70,9 @@ main(void)
 
     while(1)
     {
-        GPIOPinWrite(GPIO_PORTF_BASE, 0xFF, MapPin(desc.ioPin[0].pin));
+       // GPIOPinWrite(GPIO_PORTF_BASE, MapPin(desc.ioPin[0].pin) | MapPin(desc.ioPin[2].pin), 0xFF);
         SysCtlDelay(5000000);
-        GPIOPinWrite(GPIO_PORTF_BASE, 0xFF,0x00);
+      //  GPIOPinWrite(GPIO_PORTF_BASE, MapPin(desc.ioPin[0].pin) | MapPin(desc.ioPin[2].pin) ,0x00);
         SysCtlDelay(5000000);
     }
 }
