@@ -3,29 +3,46 @@
 #include "driverlib/flash.h"
 #include "driverlib/gpio.h"
 #include "peripheral_desc.h"
+#include "inc/hw_memmap.h"
 #include "map.h"
 
 extern peripheral_desc desc;
-uint32_t mask;
-uint32_t mask1 = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3;
 
+void GPIOWrite(uint8_t index, uint8_t value)
+{
+    if(value == '0')
+        GPIOPinWrite(GPIO_PORTF_BASE, 0xFF, 0x00);
+    else
+        GPIOPinWrite(GPIO_PORTF_BASE, 0xFF, MapPin(desc.ioPin[0].pin));
+}
 uint32_t CmdHandler(uint8_t *data, uint32_t size)
 {
+   uint8_t index;
+   uint8_t pinval;
    switch(data[0]) {
-       case 'R':
-           mask = GPIO_PIN_1;
+       case 'P':
+           index = data[1] - '0';
+           desc.ioPin[index].port = data[2] - '0';
+           desc.ioPin[index].pin = data[3] - '0';
+           desc.ioPin[index].mode = data[4] - '0';
            break;
-        case 'B':
-           mask = GPIO_PIN_2;
+
+        case 'I':
+           index = data[1] - '0';
+           GPIOPinWrite(GPIO_PORTF_BASE,MapPin(desc.ioPin[index].pin),MapPin(desc.ioPin[index].pin));
            break;
-        case 'G':
-           mask = GPIO_PIN_3;
+
+        case 'i':
+           index = data[1] - '0';
+           GPIOPinWrite(GPIO_PORTF_BASE,MapPin(desc.ioPin[index].pin),0x00);
            break;
+
+
         default:
-           mask = MapPin(data[1] - '0');
+           desc.ioPin[0].pin = data[3] - '0';
    }
 
-   data[0] = data[1];
+   SaveConfig();
 
 	return size;
 }
